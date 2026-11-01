@@ -107,6 +107,7 @@
             th { background-color: #f2f2f2 !important; color: black !important; border: 1px solid #333 !important; padding: 4px 1px !important; font-size: 9px !important; white-space: normal !important; word-wrap: break-word; }
             td { border: 1px solid #333 !important; padding: 4px 1px !important; font-size: 8.5px !important; word-wrap: break-word; background: none !important; color: #000 !important; }
             
+            /* Column width percentages optimizing for A4 Landscape */
             table tr th:nth-child(1), table tr td:nth-child(1) { width: 6%; }
             table tr th:nth-child(2), table tr td:nth-child(2) { width: 10%; }
             table tr th:nth-child(3), table tr td:nth-child(3) { width: 8%; }
@@ -150,7 +151,7 @@
     <div class="header">
         <h1>ওমর করপোরেশন</h1>
         <p>বিসিক, মাসকান্দা, ময়মনসিংহ</p>
-        <p style="margin-top: 4px; font-weight: bold; color: #0056b3;">ট্রান্সপোর্ট ও পিকআপ ডেলিভারি হিসাব (অনলাইন ডেটাবেজ)</p>
+        <p style="margin-top: 4px; font-weight: bold; color: #0056b3;">ট্রান্সপোর্ট ও পিকআপ ডেলিভারি হিসাব</p>
         
         <div class="user-bar no-print">
             <span>👤 এনট্রি প্রদানকারী: <span id="currentUserDisplay" style="color:#0056b3;">-</span></span>
@@ -363,12 +364,12 @@
     <div id="tab-report" class="tab-content">
         <div class="backup-bar no-print">
             <div>
-                <strong style="color: #0056b3;">💾 ক্লাউড সিঙ্ক এবং ব্যাকআপ:</strong>
-                <span style="font-size: 13px; color: #555;"> (ডাটাবেজ ছাড়াও অফলাইন কপি ফাইল সেভ রাখতে পারেন)</span>
+                <strong style="color: #0056b3;">💾 পিসি সিকিউরিটি ব্যাকআপ:</strong>
+                <span style="font-size: 13px; color: #555;"> (ডাটা ব্যাকআপ সেভ রাখুন)</span>
             </div>
             <div style="display: flex; gap: 10px; align-items: center;">
                 <button class="btn btn-warning" onclick="downloadDataBackup()">📥 ডাটা ব্যাকআপ নিন (Save File)</button>
-                <button class="btn btn-info" onclick="document.getElementById('importFile').click()">📤 ডাটা ক্লাউডে আপলোড করুন</button>
+                <button class="btn btn-info" onclick="document.getElementById('importFile').click()">📤 ডাটা লোড করুন</button>
                 <input type="file" id="importFile" accept=".json" style="display: none;" onchange="restoreDataBackup(event)">
             </div>
         </div>
@@ -479,38 +480,14 @@
     </div>
 </div>
 
-<!-- Firebase App & Database Scripts Realtime Connection Setup -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
-    import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-database.js";
-
-    // Firebase configuration from user's screen credentials
-    const firebaseConfig = {
-        apiKey: "AIzaSyBtx55_nV7uXMLATP7k8VoyF9NInxQzcHI",
-        authDomain: "omar-raju.firebaseapp.com",
-        projectId: "omar-raju",
-        storageBucket: "omar-raju.firebasestorage.app",
-        messagingSenderId: "564184337856",
-        appId: "1:564184337856:web:5b0b1a97b18aa7670c4c25",
-        measurementId: "G-096XRV8RMR",
-        databaseURL: "https://omar-raju-default-rtdb.firebaseio.com"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    // Global App States mapped to global scope for static access
-    window.vehiclesData = [];
-    window.deliveriesData = [];
-
+<script>
     const systemUsers = {
         'Rajan': '222416',
         'Burhan': '223366',
         'Omar': '112233'
     };
 
-    window.currentUser = localStorage.getItem('omar_logged_user') || null;
+    let currentUser = localStorage.getItem('omar_logged_user') || null;
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -518,89 +495,51 @@
         const inputPass = document.getElementById('loginPass').value.trim();
 
         if (systemUsers[inputId] && systemUsers[inputId] === inputPass) {
-            window.currentUser = inputId;
-            localStorage.setItem('omar_logged_user', window.currentUser);
+            currentUser = inputId;
+            localStorage.setItem('omar_logged_user', currentUser);
             initApp();
         } else {
             alert('ভুল ইউজার আইডি অথবা পাসওয়ার্ড দিয়েছেন!');
         }
     });
 
-    window.logout = function() {
+    function logout() {
         localStorage.removeItem('omar_logged_user');
-        window.currentUser = null;
+        currentUser = null;
         location.reload();
     }
 
     function initApp() {
-        if (window.currentUser) {
+        if (currentUser) {
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('mainContainer').style.display = 'block';
-            document.getElementById('currentUserDisplay').textContent = window.currentUser;
-            document.getElementById('delPreparedBy').value = window.currentUser;
-            
-            // Listen to Firebase Realtime Database
-            listenToFirebaseData();
+            document.getElementById('currentUserDisplay').textContent = currentUser;
+            document.getElementById('delPreparedBy').value = currentUser;
+            renderLiveDeliveryTable();
+            renderDriverTable();
+            generateReport();
         } else {
             document.getElementById('loginOverlay').style.display = 'flex';
             document.getElementById('mainContainer').style.display = 'none';
         }
     }
 
-    // Sync from Firebase online database in real-time
-    function listenToFirebaseData() {
-        // 1. Sync Vehicles & Drivers
-        const vehiclesRef = ref(db, 'vehicles');
-        onValue(vehiclesRef, (snapshot) => {
-            const data = snapshot.val();
-            window.vehiclesData = [];
-            if (data) {
-                // Handle both array type and object push type structure
-                if (Array.isArray(data)) {
-                    window.vehiclesData = data.filter(item => item !== null);
-                } else {
-                    Object.keys(data).forEach(key => {
-                        window.vehiclesData.push({ firebaseKey: key, ...data[key] });
-                    });
-                }
-            }
-            updateVehicleDropdowns();
-            renderDriverTable();
-            autoFillDriverName();
-        });
-
-        // 2. Sync Deliveries
-        const deliveriesRef = ref(db, 'deliveries');
-        onValue(deliveriesRef, (snapshot) => {
-            const data = snapshot.val();
-            window.deliveriesData = [];
-            if (data) {
-                if (Array.isArray(data)) {
-                    window.deliveriesData = data.filter(item => item !== null);
-                } else {
-                    Object.keys(data).forEach(key => {
-                        window.deliveriesData.push({ firebaseKey: key, ...data[key] });
-                    });
-                }
-            }
-            renderLiveDeliveryTable();
-            generateReport();
-        });
-    }
+    let vehiclesData = JSON.parse(localStorage.getItem('omar_vehicles')) || [];
+    let deliveriesData = JSON.parse(localStorage.getItem('omar_deliveries')) || [];
 
     document.getElementById('delDate').valueAsDate = new Date();
 
     // Helper to format date to DD/MM/YYYY
-    window.formatDateDMY = function(dateString) {
+    function formatDateDMY(dateString) {
         if (!dateString) return '-';
         const parts = dateString.split('-');
         if (parts.length === 3) {
-            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            return `${parts[2]}/${parts[1]}/${parts[0]}`; // DD/MM/YYYY
         }
         return dateString;
     }
 
-    window.switchTab = function(tabName) {
+    function switchTab(tabName) {
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
         
@@ -618,16 +557,14 @@
         }
     }
 
-    window.updateVehicleDropdowns = function() {
+    function updateVehicleDropdowns() {
         const delSelect = document.getElementById('delVehicleNo');
         const filterSelect = document.getElementById('filterVehicle');
-        
-        if(!delSelect || !filterSelect) return;
         
         delSelect.innerHTML = '<option value="">গাড়ি নির্বাচন করুন</option>';
         filterSelect.innerHTML = '<option value="">সকল গাড়ি</option>';
 
-        window.vehiclesData.forEach(item => {
+        vehiclesData.forEach(item => {
             let opt = document.createElement('option');
             opt.value = item.vehNo;
             opt.textContent = item.vehNo + ' (' + item.vehType + ')';
@@ -640,9 +577,9 @@
         });
     }
 
-    window.autoFillDriverName = function() {
+    function autoFillDriverName() {
         const selectedVeh = document.getElementById('delVehicleNo').value;
-        const driverObj = window.vehiclesData.find(v => v.vehNo === selectedVeh);
+        const driverObj = vehiclesData.find(v => v.vehNo === selectedVeh);
         if(driverObj) {
             document.getElementById('delDriverName').value = driverObj.drvName;
         } else {
@@ -650,7 +587,7 @@
         }
     }
 
-    window.calculateTripMetrics = function() {
+    function calculateTripMetrics() {
         const km = parseFloat(document.getElementById('delKm').value) || 0;
         const fuelLitre = parseFloat(document.getElementById('delFuelLitre').value) || 0;
         const fuelCost = parseFloat(document.getElementById('delFuelCost').value) || 0;
@@ -668,21 +605,21 @@
         }
     }
 
-    window.renderLiveDeliveryTable = function() {
+    function renderLiveDeliveryTable() {
         const tbody = document.getElementById('liveDeliveryTableBody');
-        if(!tbody) return;
         tbody.innerHTML = '';
 
         const selectedDate = document.getElementById('delDate').value;
-        let todaysData = window.deliveriesData.filter(item => item.date === selectedDate);
+        
+        let todaysData = deliveriesData.filter(item => item.date === selectedDate);
 
         if(todaysData.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="18">নির্ধারিত তারিখে (${window.formatDateDMY(selectedDate)}) কোনো ডেলিভারির তথ্য এনট্রি করা হয়নি।</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="18">নির্ধারিত তারিখে (${formatDateDMY(selectedDate)}) কোনো ডেলিভারির তথ্য এনট্রি করা হয়নি।</td></tr>`;
             return;
         }
 
         let sortedData = [...todaysData].sort((a,b) => b.id - a.id);
-        const isRajan = (window.currentUser && window.currentUser.trim().toLowerCase() === 'rajan');
+        const isRajan = (currentUser && currentUser.trim().toLowerCase() === 'rajan');
 
         sortedData.forEach((item, index) => {
             const fuel = parseFloat(item.fuelCost) || 0;
@@ -695,13 +632,10 @@
             const income = parseFloat(item.income) || 0;
             const netProfit = income - totalExp;
 
-            // Generate lookup key for continuous deletes
-            const targetId = item.firebaseKey ? `'${item.firebaseKey}'` : item.id;
-
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><strong>${index + 1}</strong></td>
-                <td>${window.formatDateDMY(item.date)}</td>
+                <td>${formatDateDMY(item.date)}</td>
                 <td><strong>${item.vehicleNo}</strong></td>
                 <td>${item.driverName}</td>
                 <td>${item.destination}</td>
@@ -719,7 +653,7 @@
                 <td><span style="background:#e3f2fd; padding:2px 6px; border-radius:3px; font-weight:bold; color:#0056b3;">${item.preparedBy || 'Rajan'}</span></td>
                 <td class="no-print">
                     ${isRajan ? `
-                        <button class="btn btn-danger" onclick="deleteDelivery(${targetId})" style="padding:3px 6px; font-size:11px;">মুছুন</button>
+                        <button class="btn btn-danger" onclick="deleteDelivery(${item.id})" style="padding:3px 6px; font-size:11px;">মুছুন</button>
                     ` : `<span style="color:#888; font-size:11px;">অনুমতি নেই</span>`}
                 </td>
             `;
@@ -729,7 +663,7 @@
 
     document.getElementById('driverForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const editIndexStr = document.getElementById('driverEditIndex').value;
+        const editIndex = parseInt(document.getElementById('driverEditIndex').value);
         
         const vehicleObj = {
             vehNo: document.getElementById('vehNo').value.trim(),
@@ -741,52 +675,39 @@
             drvAddress: document.getElementById('drvAddress').value.trim()
         };
 
-        const isRajan = (window.currentUser && window.currentUser.trim().toLowerCase() === 'rajan');
+        const isRajan = (currentUser && currentUser.trim().toLowerCase() === 'rajan');
 
-        if(editIndexStr === "-1") {
-            // Push securely to Firebase Database Online
-            const newDriverRef = push(ref(db, 'vehicles'));
-            set(newDriverRef, vehicleObj).then(() => {
-                alert('গাড়ি ও ড্রাইভারের তথ্য সফলভাবে ক্লাউডে যোগ করা হয়েছে!');
-            });
+        if(editIndex === -1) {
+            vehiclesData.push(vehicleObj);
+            alert('গাড়ি ও ড্রাইভারের তথ্য সফলভাবে যোগ করা হয়েছে!');
         } else {
             if (!isRajan) {
                 alert('অনুমতি নেই! শুধুমাত্র Rajan এই তথ্য সংশোধন করতে পারবেন।');
                 return;
             }
-            // Update by explicit matching key
-            if(editIndexStr.startsWith('fk_') || isNaN(editIndexStr)) {
-                const cleanKey = editIndexStr.replace('fk_', '');
-                set(ref(db, `vehicles/${cleanKey}`), vehicleObj).then(() => {
-                    alert('তথ্য সফলভাবে ক্লাউডে আপডেট করা হয়েছে!');
-                });
-            } else {
-                const idx = parseInt(editIndexStr);
-                const localItem = window.vehiclesData[idx];
-                const cleanKey = localItem.firebaseKey || idx;
-                set(ref(db, `vehicles/${cleanKey}`), vehicleObj).then(() => {
-                    alert('তথ্য সফলভাবে ক্লাউডে আপডেট করা হয়েছে!');
-                });
-            }
+            vehiclesData[editIndex] = vehicleObj;
+            alert('তথ্য সফলভাবে সংশোধন করা হয়েছে!');
         }
+
+        localStorage.setItem('omar_vehicles', JSON.stringify(vehiclesData));
         resetDriverForm();
+        renderDriverTable();
+        updateVehicleDropdowns();
     });
 
-    window.renderDriverTable = function() {
+    function renderDriverTable() {
         const tbody = document.getElementById('driverTableBody');
-        if(!tbody) return;
         tbody.innerHTML = '';
 
-        if(window.vehiclesData.length === 0) {
+        if(vehiclesData.length === 0) {
             tbody.innerHTML = '<tr><td colspan="9">কোনো গাড়ি বা ড্রাইভারের তথ্য পাওয়া যায়নি।</td></tr>';
             return;
         }
 
-        const isRajan = (window.currentUser && window.currentUser.trim().toLowerCase() === 'rajan');
+        const isRajan = (currentUser && currentUser.trim().toLowerCase() === 'rajan');
 
-        window.vehiclesData.forEach((item, index) => {
+        vehiclesData.forEach((item, index) => {
             const tr = document.createElement('tr');
-            const targetRefKey = item.firebaseKey ? `'fk_${item.firebaseKey}'` : index;
             tr.innerHTML = `
                 <td>${index + 1}</td>
                 <td><strong>${item.vehNo}</strong></td>
@@ -798,8 +719,8 @@
                 <td>${item.drvAddress || '-'}</td>
                 <td class="no-print">
                     ${isRajan ? `
-                        <button class="btn btn-warning" onclick="editDriver(${targetRefKey})" style="padding:4px 8px; font-size:12px;">সংশোধন</button>
-                        <button class="btn btn-danger" onclick="deleteDriver(${targetRefKey})" style="padding:4px 8px; font-size:12px;">মুছুন</button>
+                        <button class="btn btn-warning" onclick="editDriver(${index})" style="padding:4px 8px; font-size:12px;">সংশোধন</button>
+                        <button class="btn btn-danger" onclick="deleteDriver(${index})" style="padding:4px 8px; font-size:12px;">মুছুন</button>
                     ` : `<span style="color:#888; font-size:11px;">অনুমতি নেই</span>`}
                 </td>
             `;
@@ -807,59 +728,44 @@
         });
     }
 
-    window.editDriver = function(indexOrKey) {
-        const isRajan = (window.currentUser && window.currentUser.trim().toLowerCase() === 'rajan');
+    function editDriver(index) {
+        const isRajan = (currentUser && currentUser.trim().toLowerCase() === 'rajan');
         if (!isRajan) {
             alert('অনুমতি নেই! শুধুমাত্র Rajan এই তথ্য সংশোধন করতে পারবেন।');
             return;
         }
-        
-        let item;
-        if(typeof indexOrKey === 'string' && indexOrKey.startsWith('fk_')) {
-            const cleanKey = indexOrKey.replace('fk_', '');
-            item = window.vehiclesData.find(v => v.firebaseKey === cleanKey);
-            document.getElementById('driverEditIndex').value = indexOrKey;
-        } else {
-            item = window.vehiclesData[indexOrKey];
-            document.getElementById('driverEditIndex').value = indexOrKey;
-        }
-        
-        if(!item) return;
-
+        const item = vehiclesData[index];
+        document.getElementById('driverEditIndex').value = index;
         document.getElementById('vehNo').value = item.vehNo;
         document.getElementById('vehType').value = item.vehType;
         document.getElementById('drvName').value = item.drvName;
         document.getElementById('drvMobile').value = item.drvMobile;
-        document.getElementById('drvLicense').value = item.drvLicense || '';
-        document.getElementById('drvNid').value = item.drvNid || '';
-        document.getElementById('drvAddress').value = item.drvAddress || '';
+        document.getElementById('drvLicense').value = item.drvLicense;
+        document.getElementById('drvNid').value = item.drvNid;
+        document.getElementById('drvAddress').value = item.drvAddress;
 
         document.getElementById('saveDriverBtn').textContent = 'তথ্য পরিবর্তন (Update) আপডেট করুন';
         document.getElementById('cancelDriverBtn').style.display = 'inline-block';
     }
 
-    window.resetDriverForm = function() {
+    function resetDriverForm() {
         document.getElementById('driverEditIndex').value = "-1";
         document.getElementById('driverForm').reset();
         document.getElementById('saveDriverBtn').textContent = 'গাড়ি ও ড্রাইভার সংরক্ষণ করুন';
         document.getElementById('cancelDriverBtn').style.display = 'none';
     }
 
-    window.deleteDriver = function(indexOrKey) {
-        const isRajan = (window.currentUser && window.currentUser.trim().toLowerCase() === 'rajan');
+    function deleteDriver(index) {
+        const isRajan = (currentUser && currentUser.trim().toLowerCase() === 'rajan');
         if (!isRajan) {
             alert('অনুমতি নেই! শুধুমাত্র Rajan এই তথ্য মুছে ফেলতে পারবেন।');
             return;
         }
         if(confirm('আপনি কি নিশ্চিত যে এই গাড়িটি তালিকা থেকে মুছে ফেলতে চান?')) {
-            if(typeof indexOrKey === 'string' && indexOrKey.startsWith('fk_')) {
-                const cleanKey = indexOrKey.replace('fk_', '');
-                remove(ref(db, `vehicles/${cleanKey}`));
-            } else {
-                const item = window.vehiclesData[indexOrKey];
-                const cleanKey = item.firebaseKey || indexOrKey;
-                remove(ref(db, `vehicles/${cleanKey}`));
-            }
+            vehiclesData.splice(index, 1);
+            localStorage.setItem('omar_vehicles', JSON.stringify(vehiclesData));
+            renderDriverTable();
+            updateVehicleDropdowns();
         }
     }
 
@@ -885,27 +791,30 @@
 
             perKmCost: parseFloat(document.getElementById('delPerKmCost').value) || 0,
             mileage: parseFloat(document.getElementById('delMileage').value) || 0,
-            preparedBy: window.currentUser,
+            preparedBy: currentUser,
             remarks: document.getElementById('delRemarks').value.trim()
         };
 
-        const newDeliveryRef = push(ref(db, 'deliveries'));
-        set(newDeliveryRef, delObj).then(() => {
-            alert('দৈনিক ও খরচের হিসাব সফলভাবে ক্লাউডে সংরক্ষণ করা হয়েছে!');
-            const savedDate = document.getElementById('delDate').value;
-            document.getElementById('deliveryForm').reset();
-            document.getElementById('delDate').value = savedDate;
-            document.getElementById('delPreparedBy').value = window.currentUser;
-        });
+        deliveriesData.push(delObj);
+        localStorage.setItem('omar_deliveries', JSON.stringify(deliveriesData));
+
+        alert('দৈনিক ও খরচের হিসাব সফলভাবে সংরক্ষণ করা হয়েছে!');
+        
+        const savedDate = document.getElementById('delDate').value;
+        this.reset();
+        document.getElementById('delDate').value = savedDate;
+        document.getElementById('delPreparedBy').value = currentUser;
+        
+        renderLiveDeliveryTable();
     });
 
-    window.generateReport = function() {
+    function generateReport() {
         const vehicleFilter = document.getElementById('filterVehicle').value;
         const destFilter = document.getElementById('filterDestination').value.trim().toLowerCase();
         const fromDate = document.getElementById('filterFromDate').value;
         const toDate = document.getElementById('filterToDate').value;
 
-        let filtered = window.deliveriesData.filter(item => {
+        let filtered = deliveriesData.filter(item => {
             let matchVehicle = !vehicleFilter || item.vehicleNo === vehicleFilter;
             let matchDest = !destFilter || (item.destination && item.destination.toLowerCase().includes(destFilter));
             let matchFrom = !fromDate || new Date(item.date) >= new Date(fromDate);
@@ -916,7 +825,6 @@
         filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
 
         const tbody = document.getElementById('reportTableBody');
-        if(!tbody) return;
         tbody.innerHTML = '';
 
         let totKm = 0, totFuel = 0, totOilCost = 0, totOtherCost = 0, totIncome = 0, totNetProfit = 0;
@@ -924,7 +832,7 @@
         let validKmCostCount = 0, sumPerKmCost = 0;
         let validMileageCount = 0, sumMileage = 0;
         
-        const isRajan = (window.currentUser && window.currentUser.trim().toLowerCase() === 'rajan');
+        const isRajan = (currentUser && currentUser.trim().toLowerCase() === 'rajan');
 
         if(filtered.length === 0) {
             tbody.innerHTML = '<tr><td colspan="16">কোনো তথ্য পাওয়া যায়নি।</td></tr>';
@@ -960,11 +868,9 @@
                     validMileageCount++;
                 }
 
-                const targetId = item.firebaseKey ? `'${item.firebaseKey}'` : item.id;
-
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${window.formatDateDMY(item.date)}</td>
+                    <td>${formatDateDMY(item.date)}</td>
                     <td><strong>${item.vehicleNo}</strong></td>
                     <td>${item.destination}</td>
                     <td>${item.km}</td>
@@ -981,7 +887,7 @@
                     <td style="font-weight:bold; background-color:#f0f7ff; color:${netProfit >= 0 ? '#28a745' : '#dc3545'}">${netProfit.toFixed(1)} ৳</td>
                     <td class="no-print">
                         ${isRajan ? `
-                            <button class="btn btn-danger" onclick="deleteDelivery(${targetId})" style="padding:3px 6px; font-size:11px;">মুছুন</button>
+                            <button class="btn btn-danger" onclick="deleteDelivery(${item.id})" style="padding:3px 6px; font-size:11px;">মুছুন</button>
                         ` : `<span style="color:#888; font-size:11px;">অনুমতি নেই</span>`}
                     </td>
                 `;
@@ -1005,13 +911,14 @@
         document.getElementById('sumAvgPerKmCost').textContent = avgPerKm.toFixed(2) + ' ৳';
         document.getElementById('sumAvgMileage').textContent = avgMil.toFixed(2) + ' কিমি';
         
+        // Dynamic Title & Period Text Injection
         let datePeriodText = "সকল হিসাব";
         if (fromDate && toDate) {
-            datePeriodText = `${window.formatDateDMY(fromDate)} হইতে ${window.formatDateDMY(toDate)} পর্যন্ত হিসাব`;
+            datePeriodText = `${formatDateDMY(fromDate)} হইতে ${formatDateDMY(toDate)} পর্যন্ত হিসাব`;
         } else if (fromDate) {
-            datePeriodText = `${window.formatDateDMY(fromDate)} হইতে শুরু করে সব হিসাব`;
+            datePeriodText = `${formatDateDMY(fromDate)} হইতে শুরু করে সব হিসাব`;
         } else if (toDate) {
-            datePeriodText = `${window.formatDateDMY(toDate)} পর্যন্ত সব হিসাব`;
+            datePeriodText = `${formatDateDMY(toDate)} পর্যন্ত সব হিসাব`;
         }
         document.getElementById('sumReportPeriod').textContent = datePeriodText;
         document.getElementById('reportDateHeader').textContent = "বিবরণী ও রিপোর্ট (" + datePeriodText + ")";
@@ -1023,7 +930,7 @@
         }
     }
 
-    window.resetReportFilter = function() {
+    function resetReportFilter() {
         document.getElementById('filterVehicle').value = '';
         document.getElementById('filterDestination').value = '';
         document.getElementById('filterFromDate').value = '';
@@ -1031,26 +938,24 @@
         generateReport();
     }
 
-    window.deleteDelivery = function(idOrKey) {
-        const isRajan = (window.currentUser && window.currentUser.trim().toLowerCase() === 'rajan');
+    function deleteDelivery(id) {
+        const isRajan = (currentUser && currentUser.trim().toLowerCase() === 'rajan');
         if (!isRajan) {
             alert('অনুমতি নেই! শুধুমাত্র Rajan এই তথ্য মুছে ফেলতে পারবেন।');
             return;
         }
         if(confirm('আপনি কি নিশ্চিত যে এই এনট্রিটি মুছে ফেলতে চান?')) {
-            // Remove dynamically from online cloud node
-            if(isNaN(idOrKey) || typeof idOrKey === 'string') {
-                remove(ref(db, `deliveries/${idOrKey}`));
-            } else {
-                remove(ref(db, `deliveries/${idOrKey}`));
-            }
+            deliveriesData = deliveriesData.filter(item => item.id !== id);
+            localStorage.setItem('omar_deliveries', JSON.stringify(deliveriesData));
+            renderLiveDeliveryTable();
+            generateReport();
         }
     }
 
-    window.downloadDataBackup = function() {
+    function downloadDataBackup() {
         const backupData = {
-            vehicles: window.vehiclesData,
-            deliveries: window.deliveriesData,
+            vehicles: vehiclesData,
+            deliveries: deliveriesData,
             exportDate: new Date().toISOString()
         };
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData));
@@ -1058,15 +963,15 @@
         const todayStr = new Date().toISOString().slice(0,10);
         
         downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", `Omar_Corporation_Online_Backup_${todayStr}.json`);
+        downloadAnchor.setAttribute("download", `Omar_Corporation_Backup_${todayStr}.json`);
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
         
-        alert('আপনার অফলাইন ব্যাকআপ ডাটা সফলভাবে ডাউনলোড হয়েছে!');
+        alert('আপনার ডাটা সফলভাবে ডাউনলোড হয়েছে! ফাইলটি সুরক্ষিত রাখুন।');
     }
 
-    window.restoreDataBackup = function(event) {
+    function restoreDataBackup(event) {
         const file = event.target.files[0];
         if (!file) return;
 
@@ -1074,23 +979,18 @@
         reader.onload = function(e) {
             try {
                 const restoredObj = JSON.parse(e.target.result);
-                if (restoredObj.vehicles || restoredObj.deliveries) {
-                    if(confirm('আপনি কি নিশ্চিত যে এই ফাইলের সমস্ত ডাটা সরাসরি অনলাইন ক্লাউড ডেটাবেজে আপলোড ও মার্জ করতে চান?')) {
-                        // Batch load into online nodes
-                        if(restoredObj.vehicles) {
-                            restoredObj.vehicles.forEach(v => {
-                                delete v.firebaseKey;
-                                push(ref(db, 'vehicles'), v);
-                            });
-                        }
-                        if(restoredObj.deliveries) {
-                            restoredObj.deliveries.forEach(d => {
-                                delete d.firebaseKey;
-                                push(ref(db, 'deliveries'), d);
-                            });
-                        }
-                        alert('অভিনন্দন! আপনার লোকাল ফাইল থেকে সমস্ত ডাটা অনলাইন লাইভ ক্লাউড ডেটাবেজে সফলভাবে আপলোড হয়েছে।');
-                    }
+                if (restoredObj.vehicles && restoredObj.deliveries) {
+                    vehiclesData = restoredObj.vehicles;
+                    deliveriesData = restoredObj.deliveries;
+                    
+                    localStorage.setItem('omar_vehicles', JSON.stringify(vehiclesData));
+                    localStorage.setItem('omar_deliveries', JSON.stringify(deliveriesData));
+
+                    alert('অভিনন্দন! আপনার আগের ডাটা সফলভাবে সফটওয়্যারে লোড হয়েছে।');
+                    updateVehicleDropdowns();
+                    renderDriverTable();
+                    renderLiveDeliveryTable();
+                    generateReport();
                 } else {
                     alert('ভুল ফাইল সিলেক্ট করেছেন! সঠিক ব্যাকআপ ফাইল বেছে নিন।');
                 }
@@ -1101,8 +1001,8 @@
         reader.readAsText(file);
     }
 
-    // Trigger Initial Lifecycle Auth Gate
     initApp();
+    updateVehicleDropdowns();
 </script>
 
 </body>
