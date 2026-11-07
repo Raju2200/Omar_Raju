@@ -6,160 +6,137 @@
     <title>ওমর করপোরেশন - ট্রান্সপোর্ট ম্যানেজমেন্ট সফটওয়্যার</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%); color: #2d3748; padding: 15px; min-height: 100vh; }
-        .container { max-width: 1400px; margin: 0 auto; background: #ffffff; padding: 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        body { background: #e0eae9; color: #2d3748; padding: 15px; min-height: 100vh; }
+        .container { max-width: 1400px; margin: 0 auto; background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         
         /* Header & User Bar */
-        .header { text-align: center; border-bottom: 3px solid #1a365d; padding-bottom: 20px; margin-bottom: 25px; position: relative; background: linear-gradient(135deg, #1a365d 0%, #2a4365 100%); color: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .header h1 { color: #f6ad55; font-size: 34px; margin-bottom: 6px; font-weight: 800; letter-spacing: 0.5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
-        .header p { color: #e2e8f0; font-size: 15px; margin-bottom: 2px; }
-        .user-bar { position: absolute; right: 15px; top: 15px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: bold; background: rgba(255,255,255,0.15); padding: 8px 18px; border-radius: 30px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); color: white; }
+        .header { text-align: center; border-bottom: 3px solid #1e4d4a; padding: 20px; margin-bottom: 25px; position: relative; background: #2c5e5a; color: white; border-radius: 8px; }
+        .header h1 { color: #ffffff; font-size: 32px; margin-bottom: 6px; font-weight: 800; letter-spacing: 0.5px; }
+        .header p { color: #d1eae7; font-size: 14px; margin-bottom: 2px; }
+        .user-bar { position: absolute; right: 15px; top: 15px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: bold; background: rgba(255,255,255,0.15); padding: 8px 18px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); color: white; }
         
         /* Login Screen */
-        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(8px); }
-        .login-box { background: white; padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); text-align: center; border: 1px solid #e2e8f0; margin: 15px; }
-        .login-box h2 { color: #1a365d; margin-bottom: 8px; font-size: 26px; font-weight: 800; }
-        .login-box p { color: #718096; font-size: 14px; margin-bottom: 25px; }
-        .login-box input { width: 100%; padding: 12px 16px; margin-bottom: 18px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: all 0.3s; background: #f8fafc; }
-        .login-box input:focus { border-color: #3182ce; background: white; outline: none; box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15); }
+        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(24, 46, 44, 0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(5px); }
+        .login-box { background: white; padding: 40px; border-radius: 8px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; border: 1px solid #c9dad8; margin: 15px; }
+        .login-box h2 { color: #1e4d4a; margin-bottom: 8px; font-size: 26px; font-weight: 800; }
+        .login-box p { color: #5a7371; font-size: 14px; margin-bottom: 25px; }
+        .login-box input { width: 100%; padding: 12px 16px; margin-bottom: 18px; border: 2px solid #c9dad8; border-radius: 4px; font-size: 14px; transition: all 0.3s; background: #f4f8f7; }
+        .login-box input:focus { border-color: #2c5e5a; background: white; outline: none; }
         
         /* Tabs Nav */
-        .nav-tabs { display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 25px; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
-        .nav-tabs::-webkit-scrollbar { display: none; }
-        .tab-btn { padding: 12px 24px; border: none; background: #edf2f7; color: #4a5568; font-weight: bold; cursor: pointer; border-radius: 10px 10px 0 0; font-size: 15px; transition: all 0.2s; white-space: nowrap; flex-shrink: 0; }
-        .tab-btn.active { background: #1a365d; color: white; box-shadow: 0 -4px 12px rgba(26, 54, 93, 0.1); }
+        .nav-tabs { display: flex; border-bottom: 3px solid #2c5e5a; margin-bottom: 25px; gap: 4px; overflow-x: auto; padding-bottom: 2px; }
+        .tab-btn { padding: 12px 20px; border: none; background: #cadad8; color: #1e4d4a; font-weight: bold; cursor: pointer; border-radius: 4px 4px 0 0; font-size: 14px; transition: all 0.2s; white-space: nowrap; }
+        .tab-btn.active { background: #2c5e5a; color: white; }
+        
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         /* Titles */
-        .section-title { background: #edf2f7; border-left: 6px solid #1a365d; padding: 12px 18px; font-size: 18px; font-weight: bold; margin: 25px 0 20px 0; color: #1a365d; border-radius: 0 8px 8px 0; }
+        .section-title { background: #cadad8; border-left: 6px solid #1e4d4a; padding: 12px 18px; font-size: 18px; font-weight: bold; margin: 25px 0 20px 0; color: #1e4d4a; border-radius: 0 4px 4px 0; }
+        .edit-mode-title { background: #fff5f5; border-left: 6px solid #c53030; color: #c53030; }
 
         /* Layout Grid */
-        .form-row-custom {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 15px;
-            margin-bottom: 15px;
-            align-items: end;
-        }
+        .form-row-custom { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin-bottom: 15px; align-items: end; }
         .form-group { display: flex; flex-direction: column; width: 100%; }
-        .form-group label { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #4a5568; min-height: 18px; }
-        .form-group input, .form-group select, .form-group textarea { padding: 10px 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: all 0.2s; width: 100%; height: 44px; display: block; background: #f8fafc; color: #2d3748; }
-        .form-group input:focus, .form-group select:focus { border-color: #1a365d; outline: none; background: white; box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.1); }
-        .form-group input[readonly] { background-color: #e2e8f0; color: #4a5568; border-color: #e2e8f0; cursor: not-allowed; }
+        .form-group label { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #2d3748; }
+        .form-group input, .form-group select { padding: 10px 14px; border: 2px solid #c9dad8; border-radius: 4px; font-size: 14px; transition: all 0.2s; width: 100%; height: 42px; display: block; background: #f4f8f7; color: #2d3748; }
+        .form-group input:focus, .form-group select:focus { border-color: #2c5e5a; outline: none; background: white; }
+        .form-group input[readonly] { background-color: #cadad8; color: #2d3748; cursor: not-allowed; }
         
         /* Buttons */
-        .btn { padding: 11px 22px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn { padding: 11px 22px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
         .btn:active { transform: scale(0.98); }
-        .btn-success { background-color: #2f855a; color: white; }
-        .btn-success:hover { background-color: #22543d; }
-        .btn-primary { background-color: #1a365d; color: white; }
-        .btn-primary:hover { background-color: #2a4365; }
-        .btn-secondary { background-color: #4a5568; color: white; }
-        .btn-secondary:hover { background-color: #2d3748; }
-        .btn-warning { background-color: #dd6b20; color: white; }
+        .btn-success { background-color: #2c5e5a; color: white; }
+        .btn-success:hover { background-color: #1e4d4a; }
+        .btn-primary { background-color: #3b7a75; color: white; }
+        .btn-primary:hover { background-color: #2c5e5a; }
+        .btn-secondary { background-color: #5a7371; color: white; }
+        .btn-secondary:hover { background-color: #435755; }
+        .btn-warning { background-color: #d69e2e; color: white; }
         .btn-warning:hover { background-color: #b7791f; }
         .btn-danger { background-color: #c53030; color: white; }
         .btn-danger:hover { background-color: #9b2c2c; }
-        .btn-info { background-color: #2b6cb0; color: white; }
-        .btn-info:hover { background-color: #2c5282; }
 
         /* Filter Box & Backup Box */
-        .filter-box { background: #f7fafc; padding: 20px; border: 2px solid #edf2f7; border-radius: 12px; margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
+        .filter-box { background: #f4f8f7; padding: 20px; border: 2px solid #cadad8; border-radius: 6px; margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
         .filter-box .form-group { flex: 1; min-width: 200px; }
-        .backup-bar { background: #ebf8ff; padding: 18px 20px; border-radius: 12px; border: 2px solid #bee3f8; margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; }
+        .backup-bar { background: #eef6f5; padding: 18px 20px; border-radius: 6px; border: 2px solid #cadad8; margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; }
 
         /* Tables */
-        .table-responsive { overflow-x: auto; margin-top: 15px; border-radius: 10px; border: 2px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); background: white; }
-        table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 1100px; }
-        table, th, td { border: 1px solid #e2e8f0; }
-        th { background-color: #1a365d; color: white; padding: 14px 10px; text-align: center; white-space: nowrap; font-weight: 700; font-size: 14px; }
-        td { padding: 12px 10px; text-align: center; vertical-align: middle; color: #4a5568; }
-        tr:nth-child(even) { background-color: #f7fafc; }
-        tr:hover { background-color: #edf2f7; }
+        .table-responsive { overflow-x: auto; margin-top: 15px; border: 2px solid #cadad8; background: white; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 1200px; }
+        table, th, td { border: 1px solid #cadad8; }
+        th { background-color: #2c5e5a; color: white; padding: 12px 8px; text-align: center; white-space: nowrap; font-weight: 700; }
+        td { padding: 10px 8px; text-align: center; vertical-align: middle; color: #2d3748; }
+        tr:nth-child(even) { background-color: #f4f8f7; }
+        tr:hover { background-color: #eef6f5; }
         
         /* Summary Box/Cards Dashboard */
-        .summary-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 25px; }
-        .card { background: #ffffff; padding: 20px 15px; border-radius: 12px; text-align: center; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s; border-top: 4px solid #4a5568; }
-        .card:hover { transform: translateY(-2px); }
-        .card h4 { font-size: 13px; color: #718096; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
-        .card p { font-size: 22px; font-weight: bold; color: #1a202c; }
+        .summary-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 25px; }
+        .card { background: #3b7a75; padding: 15px 10px; border-radius: 0px; text-align: center; border: 1px solid #2c5e5a; color: white; }
+        .card h4 { font-size: 13px; color: #d1eae7; margin-bottom: 6px; text-transform: uppercase; font-weight: 700; }
+        .card p { font-size: 20px; font-weight: bold; color: #ffffff; }
         
-        /* Theme Card Colors */
-        .card.income { border-top: 4px solid #2f855a; background: #f0fff4; }
-        .card.income p { color: #2f855a; }
-        .card.expense { border-top: 4px solid #c53030; background: #fff5f5; }
-        .card.expense p { color: #c53030; }
-        .card.oil-expense { border-top: 4px solid #d69e2e; background: #fffaf0; }
-        .card.oil-expense p { color: #b7791f; }
-        .card.profit { border-top: 4px solid #2b6cb0; background: #ebf8ff; }
-        .card.profit p { color: #2b6cb0; }
-        
-        /* New Red Bordered Cards */
-        .card.red-bordered { border: 2px solid #c53030; border-top: 4px solid #c53030; background: #fff5f5; }
-        .card.red-bordered h4 { color: #c53030; }
-        .card.red-bordered p { color: #c53030; }
+        .card.income { background: #2c5e5a; }
+        .card.expense { background: #a24646; }
+        .card.oil-expense { background: #be8239; }
+        .card.profit { background: #2a6175; }
 
-        /* Responsive Mobile Styling Adjustments */
         @media (max-width: 1200px) {
             .form-row-custom { grid-template-columns: repeat(3, 1fr); }
         }
         @media (max-width: 768px) {
-            body { padding: 8px; }
-            .container { padding: 15px; border-radius: 12px; }
-            .header { padding: 35px 15px 20px 15px; position: relative; }
-            .header h1 { font-size: 24px; }
-            .user-bar { position: static; margin-bottom: 15px; display: inline-flex; justify-content: center; width: auto; }
             .form-row-custom { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .form-row-custom style { grid-template-columns: 1fr !important; }
-            #driverForm .form-row-custom { grid-template-columns: 1fr !important; }
             .filter-box .form-group { min-width: 100%; }
-            .btn { width: 100%; margin-top: 5px; }
-            .backup-bar { flex-direction: column; text-align: center; }
-            .backup-bar div { width: 100%; justify-content: center; }
         }
         @media (max-width: 480px) {
             .form-row-custom { grid-template-columns: 1fr; }
-            .form-group style { grid-column: span 1 !important; }
         }
 
+        /* PERFECT PRINT STYLES */
         @media print {
-            @page { size: A4 landscape; margin: 4mm; }
-            body { padding: 0; background: white; font-size: 9px; color: #000; }
-            .container { box-shadow: none; border: none; width: 100%; max-width: 100%; padding: 0; margin: 0; }
-            .nav-tabs, form, .filter-box, .backup-bar, .btn, .no-print, .user-bar { display: none !important; }
-            .tab-content { display: block !important; }
-            #tab-entry, #tab-drivers { display: none !important; }
-            #tab-report { display: block !important; }
-            .header { background: none !important; color: #000 !important; padding: 0; border-bottom: 2px solid #000; }
-            .header h1 { font-size: 18px; margin-bottom: 2px; color: #000 !important; text-shadow: none; }
-            .header p { font-size: 10px; color: #000 !important; }
-            .section-title { font-size: 11px; padding: 4px; margin-bottom: 8px; background: #eee !important; border-left: 4px solid #333 !important; color: #000 !important; }
-            .table-responsive { overflow: visible !important; border: none; margin-top: 5px; }
-            table { width: 100% !important; min-width: 100% !important; font-size: 9px !important; table-layout: fixed; }
-            th { background-color: #f2f2f2 !important; color: black !important; border: 1px solid #333 !important; padding: 4px 1px !important; font-size: 9px !important; white-space: normal !important; word-wrap: break-word; }
-            td { border: 1px solid #333 !important; padding: 4px 1px !important; font-size: 8.5px !important; word-wrap: break-word; background: none !important; color: #000 !important; }
+            @page { size: A4 landscape; margin: 8mm 6mm 8mm 6mm; }
+            html, body { background: white !important; color: black !important; font-size: 10px !important; padding: 0 !important; margin: 0 !important; width: 100% !important; }
+            .container { box-shadow: none !important; border: none !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
             
-            table tr th:nth-child(1), table tr td:nth-child(1) { width: 6%; }
-            table tr th:nth-child(2), table tr td:nth-child(2) { width: 10%; }
-            table tr th:nth-child(3), table tr td:nth-child(3) { width: 8%; }
-            table tr th:nth-child(4), table tr td:nth-child(4) { width: 5%; }
+            .nav-tabs, form, .filter-box, .backup-bar, .btn, .no-print, .user-bar, .login-overlay { display: none !important; }
+            
+            .tab-content { display: none !important; }
+            #tab-report { display: block !important; width: 100% !important; }
+            
+            .header { background: none !important; color: black !important; padding: 5px 0 !important; border-bottom: 2px solid black !important; text-align: center !important; margin-bottom: 15px !important; }
+            .header h1 { font-size: 22px !important; color: black !important; font-weight: bold !important; margin-bottom: 2px !important; }
+            .header p { font-size: 11px !important; color: black !important; }
+            
+            .section-title { font-size: 13px !important; padding: 5px !important; margin: 15px 0 10px 0 !important; background: #e5e5e5 !important; border-left: 5px solid #333 !important; color: black !important; border-radius: 0 !important; }
+            
+            .table-responsive { overflow: visible !important; border: 1px solid black !important; margin-top: 10px !important; box-shadow: none !important; width: 100% !important; }
+            table { width: 100% !important; min-width: 100% !important; font-size: 10px !important; table-layout: fixed !important; border-collapse: collapse !important; }
+            th, td { border: 1px solid black !important; padding: 6px 3px !important; text-align: center !important; line-height: 1.2 !important; overflow: hidden !important; word-wrap: break-word !important; white-space: normal !important; }
+            th { background-color: #e5e5e5 !important; color: black !important; font-weight: bold !important; font-size: 10px !important; }
+            td { background: none !important; color: black !important; font-size: 9.5px !important; }
+            tr { background: none !important; page-break-inside: avoid !important; }
+            
+            table tr th:nth-child(1), table tr td:nth-child(1) { width: 7%; }
+            table tr th:nth-child(2), table tr td:nth-child(2) { width: 11%; }
+            table tr th:nth-child(3), table tr td:nth-child(3) { width: 9%; }
+            table tr th:nth-child(4), table tr td:nth-child(4) { width: 6%; }
             table tr th:nth-child(5), table tr td:nth-child(5) { width: 5%; }
-            table tr th:nth-child(6), table tr td:nth-child(6) { width: 6%; }
-            table tr th:nth-child(7), table tr td:nth-child(7) { width: 7%; }
+            table tr th:nth-child(6), table tr td:nth-child(6) { width: 7%; }
+            table tr th:nth-child(7), table tr td:nth-child(7) { width: 6%; }
             table tr th:nth-child(8), table tr td:nth-child(8) { width: 6%; }
-            table tr th:nth-child(9), table tr td:nth-child(9) { width: 6%; }
-            table tr th:nth-child(10), table tr td:nth-child(10) { width: 6%; }
-            table tr th:nth-child(11), table tr td:nth-child(11) { width: 6%; }
-            table tr th:nth-child(12), table tr td:nth-child(12) { width: 7%; }
-            table tr th:nth-child(13), table tr td:nth-child(13) { width: 7%; }
-            table tr th:nth-child(14), table tr td:nth-child(14) { width: 7%; }
-            table tr th:nth-child(15), table tr td:nth-child(15) { width: 8%; }
+            table tr th:nth-child(9), table tr td:nth-child(9) { width: 5%; }
+            table tr th:nth-child(10), table tr td:nth-child(10) { width: 5%; }
+            table tr th:nth-child(11), table tr td:nth-child(11) { width: 5%; }
+            table tr th:nth-child(12), table tr td:nth-child(12) { width: 8%; }
+            table tr th:nth-child(13), table tr td:nth-child(13) { width: 8%; }
+            table tr th:nth-child(14), table tr td:nth-child(14) { width: 8%; }
+            table tr th:nth-child(15), table tr td:nth-child(15) { width: 7%; }
             
-            .summary-box { display: flex !important; flex-direction: row !important; justify-content: space-between !important; margin-top: 12px !important; gap: 4px; flex-wrap: wrap; }
-            .card { flex: 1 !important; min-width: 100px; padding: 6px !important; border: 1px solid #333 !important; background: #fff !important; box-shadow: none !important; border-top: 3px solid #333 !important; transform: none !important; }
-            .card h4 { font-size: 8.5px !important; color: #000 !important; }
-            .card p { font-size: 11px !important; color: #000 !important; }
+            .summary-box { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 6px !important; margin-top: 15px !important; page-break-inside: avoid !important; }
+            .card { background: white !important; color: black !important; border: 1px solid black !important; padding: 6px !important; box-shadow: none !important; transform: none !important; }
+            .card h4 { font-size: 9px !important; color: #333 !important; }
+            .card p { font-size: 12px !important; color: black !important; font-weight: bold !important; }
         }
     </style>
 </head>
@@ -172,7 +149,7 @@
         <form id="loginForm">
             <input type="text" id="loginId" placeholder="ইউজার আইডি" required>
             <input type="password" id="loginPass" placeholder="পাসওয়ার্ড" required>
-            <button type="submit" class="btn btn-primary" style="width: 100%;">লগইন করুন</button>
+            <button type="submit" class="btn btn-success" style="width: 100%;">লগইন করুন</button>
         </form>
     </div>
 </div>
@@ -181,10 +158,10 @@
     <div class="header">
         <h1>ওমর করপোরেশন</h1>
         <p>বিসিক, মাসকান্দা, ময়মনসিংহ</p>
-        <p style="margin-top: 4px; font-weight: bold; color: #f6ad55;">ট্রান্সপোর্ট ও পিকআপ ডেলিভারি হিসাব</p>
+        <p style="margin-top: 4px; font-weight: bold; color: #fff;">ট্রান্সপোর্ট ও পিকআপ ডেলিভারি হিসাব</p>
         
         <div class="user-bar no-print">
-            <span>👤(ইউজার): <span id="currentUserDisplay" style="color:#f6ad55;">-</span></span>
+            <span>👤(ইউজার): <span id="currentUserDisplay" style="color:#fff;">-</span></span>
             <button class="btn btn-danger" style="padding: 2px 8px; font-size: 11px;" onclick="logout()">লগআউট</button>
         </div>
     </div>
@@ -193,12 +170,13 @@
         <button class="tab-btn active" onclick="switchTab('entry')">১. ডেলিভারি ও খরচের তথ্য</button>
         <button class="tab-btn" onclick="switchTab('drivers')">২. গাড়ি ও ড্রাইভারের তথ্য</button>
         <button class="tab-btn" onclick="switchTab('report')">৩. ডেলিভারি ও আয়-ব্যয় বিবরণী</button>
+        <button class="tab-btn" id="adminTabBtn" style="display:none;" onclick="switchTab('admin')">৪. ইউজার কন্ট্রোল প্যানেল</button>
     </div>
 
     <div id="tab-entry" class="tab-content active">
-        <div class="section-title">প্রতিদিনের পিকাপ ডেলিভারি, আয় ও খরচের তথ্য</div>
+        <div class="section-title" id="entryFormTitle">প্রতিদিনের পিকাপ ডেলিভারি, আয় ও খরচের তথ্য</div>
         <form id="deliveryForm" style="margin-bottom: 25px;">
-            
+            <input type="hidden" id="deliveryEditId" value="-1">
             <div class="form-row-custom">
                 <div class="form-group">
                     <label>তারিখ:*</label>
@@ -238,11 +216,11 @@
                     <input type="number" id="delKm" step="0.1" min="0" placeholder="0" oninput="calculateTripMetrics()" required>
                 </div>
                 <div class="form-group">
-                    <label style="color: #2f855a;">ভাড়া (টাকা):*</label>
+                    <label style="color: #2c5e5a;">ভাড়া (টাকা):*</label>
                     <input type="number" id="delIncome" step="0.1" min="0" placeholder="0" required>
                 </div>
                 <div class="form-group">
-                    <label style="color: #4a5568;">তেল খরচ (টাকা):*</label>
+                    <label style="color: #2d3748;">তেল খরচ (টাকা):*</label>
                     <input type="number" id="delFuelCost" step="0.1" min="0" placeholder="0" oninput="calculateTripMetrics()" required>
                 </div>
                 <div class="form-group">
@@ -278,11 +256,12 @@
                 </div>
                 <div class="form-group">
                     <label>তথ্য প্রদানকারী (ইউজার):</label>
-                    <input type="text" id="delPreparedBy" readonly style="font-weight: bold; color: #1a365d;">
+                    <input type="text" id="delPreparedBy" readonly style="font-weight: bold; color: #1e4d4a;">
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-success" style="margin-top: 10px;">তথ্য সংরক্ষণ করুন (Save Entry)</button>
+            <button type="submit" id="saveDeliveryBtn" class="btn btn-success" style="margin-top: 10px;">তথ্য সংরক্ষণ করুন (Save Entry)</button>
+            <button type="button" id="cancelDeliveryBtn" class="btn btn-secondary" style="display:none; margin-top: 10px;" onclick="resetDeliveryForm()">সংশোধন বাতিল করুন</button>
         </form>
 
         <div class="section-title">ডেলিভারির তালিকা (লাইভ ট্র্যাক)</div>
@@ -297,22 +276,20 @@
                         <th>গন্তব্য</th>
                         <th>কিলোমিটার</th>
                         <th>তেল (লি.)</th>
-                        <th style="background-color: #2f855a;">ভাড়া (৳)</th>
+                        <th style="background-color: #2c5e5a;">ভাড়া (৳)</th>
                         <th>তেল খরচ</th>
                         <th>রোড খরচ</th>
                         <th>মজুরী</th>
                         <th>মবিল</th>
-                        <th style="background-color: #9b2c2c;">অন্যান্য খরচ</th>
-                        <th style="background-color: #1a365d;">নিট আমদানী</th>
+                        <th style="background-color: #a24646;">অন্যান্য খরচ</th>
+                        <th style="background-color: #1e4d4a;">নিট আমদানী</th>
                         <th>মাইলেজ</th>
                         <th>ডেলিভারী ধরণ</th>
                         <th>তথ্য প্রদানকারী</th>
                         <th class="no-print">অ্যাকশন</th>
                     </tr>
                 </thead>
-                <tbody id="liveDeliveryTableBody">
-                    <!-- Dynamic Live Rows -->
-                </tbody>
+                <tbody id="liveDeliveryTableBody"></tbody>
             </table>
         </div>
     </div>
@@ -361,7 +338,7 @@
             <button type="button" id="cancelDriverBtn" class="btn btn-secondary" style="display:none; margin-top: 15px;" onclick="resetDriverForm()">বাতিল করুন</button>
         </form>
 
-        <div class="section-title">সংরক্ষিত গাড়ি ও ড্রাইভার তালিকা</div>
+        <div class="section-title">সংরक्षित গাড়ি ও ড্রাইভার তালিকা</div>
         <div class="table-responsive">
             <table>
                 <thead>
@@ -377,9 +354,7 @@
                         <th class="no-print">অ্যাকশন</th>
                     </tr>
                 </thead>
-                <tbody id="driverTableBody">
-                    <!-- Loaded dynamically -->
-                </tbody>
+                <tbody id="driverTableBody"></tbody>
             </table>
         </div>
     </div>
@@ -387,12 +362,12 @@
     <div id="tab-report" class="tab-content">
         <div class="backup-bar no-print">
             <div>
-                <strong style="color: #1a365d;">💾 পিসি সিকিউরিটি ব্যাকআপ:</strong>
-                <span style="font-size: 13px; color: #4a5568;"> (ডাটা ব্যাকআপ সেভ রাখুন)</span>
+                <strong style="color: #1e4d4a;">💾 পিসি সিকিউরিটি ব্যাকআপ:</strong>
+                <span style="font-size: 13px; color: #2d3748;"> (ডাটা ব্যাকআপ সেভ রাখুন)</span>
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; width:100%; max-width:fit-content;">
                 <button class="btn btn-warning" onclick="downloadDataBackup()">📥 ডাটা ব্যাকআপ নিন (Save File)</button>
-                <button class="btn btn-info" onclick="document.getElementById('importFile').click()">📤 পূর্বের ডাটা লোড করুন</button>
+                <button class="btn btn-primary" onclick="document.getElementById('importFile').click()">📤 পূর্বের ডাটা লোড করুন</button>
                 <input type="file" id="importFile" accept=".json" style="display: none;" onchange="restoreDataBackup(event)">
             </div>
         </div>
@@ -418,7 +393,7 @@
                 <label>শেষ তারিখ:</label>
                 <input type="date" id="filterToDate">
             </div>
-            <button class="btn btn-primary" onclick="generateReport()">খুঁজুন (Search)</button>
+            <button class="btn btn-success" onclick="generateReport()">খুঁজুন (Search)</button>
             <button class="btn btn-secondary" onclick="resetReportFilter()">রিসেট</button>
             <button class="btn btn-warning" style="margin-left: auto;" onclick="window.print()">প্রিন্ট / PDF করুন</button>
         </div>
@@ -432,25 +407,22 @@
                         <th>গন্তব্য</th>
                         <th>কিলোমিটার</th>
                         <th>তেল (লি.)</th>
-                        <th style="background-color: #c6f6d5; color: #22543d;">ভাড়া (৳)</th>
+                        <th style="background-color: #2c5e5a; color: white;">ভাড়া (৳)</th>
                         <th>তেল খরচ</th>
                         <th>রোড খরচ</th>
                         <th>মজুরী</th>
                         <th>মবিল</th>
                         <th>অন্যান্য খরচ</th>
-                        <th style="background-color: #fffaf0; color: #b7791f;">মোট তেল খরচ</th>
-                        <th style="background-color: #fff5f5; color: #c53030;">মোট অন্যান্য খরচ</th>
+                        <th style="background-color: #be8239; color: white;">মোট তেল খরচ</th>
+                        <th style="background-color: #a24646; color: white;">মোট অন্যান্য খরচ</th>
                         <th>ডেলিভারী ধরণ</th>
-                        <th style="background-color: #ebf8ff; color: #2b6cb0;">নিট আমদানী</th>
+                        <th style="background-color: #2a6175; color: white;">নিট আমদানী</th>
                         <th class="no-print">অ্যাকশন</th>
                     </tr>
                 </thead>
-                <tbody id="reportTableBody">
-                    <!-- Dynamic Rows -->
-                </tbody>
+                <tbody id="reportTableBody"></tbody>
             </table>
         </div>
-        
         <div class="summary-box">
             <div class="card">
                 <h4>মোট ট্রিপ</h4>
@@ -480,11 +452,11 @@
                 <h4>নিট আমদানী</h4>
                 <p id="sumNetProfit">০ ৳</p>
             </div>
-            <div class="card red-bordered">
+            <div class="card">
                 <h4>গড় প্রতি-কিমি খরচ</h4>
                 <p id="sumAvgPerKmCost">০.০০ ৳</p>
             </div>
-            <div class="card red-bordered">
+            <div class="card">
                 <h4>গড় মাইলেজ</h4>
                 <p id="sumAvgMileage">০.০০ কিমি</p>
             </div>
@@ -502,14 +474,52 @@
             </div>
         </div>
     </div>
+
+    <div id="tab-admin" class="tab-content">
+        <div class="section-title">৪. মাষ্টার ইউজার কন্ট্রোল প্যানেল (নতুন ব্যবহারকারী তৈরি করুন)</div>
+        <form id="userCreationForm" style="margin-bottom: 25px;">
+            <div class="form-row-custom" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="form-group">
+                    <label>নতুন ইউজার আইডি (ইংরেজি নাম):*</label>
+                    <input type="text" id="newUserId" placeholder="যেমন: Labib" required>
+                </div>
+                <div class="form-group">
+                    <label>পাসওয়ার্ড / পিন কোড:*</label>
+                    <input type="password" id="newUserPass" placeholder="যেমন: 123456" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success" style="width:100%; height:42px;">নতুন ইউজার যুক্ত করুন</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="section-title">সিস্টেমের সক্রিয় ব্যবহারকারীদের তালিকা</div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ক্রমিক</th>
+                        <th>ইউজার আইডি</th>
+                        <th>পাসওয়ার্ড (পিন)</th>
+                        <th>টাইপ</th>
+                        <th>অ্যাকশন</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody"></tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script>
-    const systemUsers = {
+    const defaultUsers = {
         'Rajan': '222416',
         'Burhan': '223366',
         'Omar': '112233'
     };
+    
+    let systemUsers = JSON.parse(localStorage.getItem('omar_system_users')) || defaultUsers;
+    localStorage.setItem('omar_system_users', JSON.stringify(systemUsers));
 
     let currentUser = localStorage.getItem('omar_logged_user') || null;
 
@@ -539,8 +549,16 @@
             document.getElementById('mainContainer').style.display = 'block';
             document.getElementById('currentUserDisplay').textContent = currentUser;
             document.getElementById('delPreparedBy').value = currentUser;
+            
+            if(currentUser.trim().toLowerCase() === 'rajan') {
+                document.getElementById('adminTabBtn').style.display = 'inline-block';
+            } else {
+                document.getElementById('adminTabBtn').style.display = 'none';
+            }
+
             renderLiveDeliveryTable();
             renderDriverTable();
+            renderUserTable();
             generateReport();
         } else {
             document.getElementById('loginOverlay').style.display = 'flex';
@@ -577,6 +595,10 @@
             document.querySelectorAll('.tab-btn')[2].classList.add('active');
             document.getElementById('tab-report').classList.add('active');
             generateReport();
+        } else if(tabName === 'admin') {
+            document.getElementById('adminTabBtn').classList.add('active');
+            document.getElementById('tab-admin').classList.add('active');
+            renderUserTable();
         }
     }
 
@@ -628,6 +650,56 @@
         }
     }
 
+    document.getElementById('userCreationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if(currentUser.trim().toLowerCase() !== 'rajan') {
+            alert('শুধুমাত্র প্রধান অ্যাডমিন Rajan নতুন ব্যবহারকারী তৈরি করতে পারবেন!');
+            return;
+        }
+        
+        const newId = document.getElementById('newUserId').value.trim();
+        const newPass = document.getElementById('newUserPass').value.trim();
+
+        if(systemUsers[newId]) {
+            alert('এই ইউজার আইডিটি ইতিমধ্যে সিস্টেমে সচল আছে!');
+            return;
+        }
+
+        systemUsers[newId] = newPass;
+        localStorage.setItem('omar_system_users', JSON.stringify(systemUsers));
+        alert('নতুন ব্যবহারকারী সফলভাবে সিস্টেমে যুক্ত করা হয়েছে!');
+        this.reset();
+        renderUserTable();
+    });
+
+    function renderUserTable() {
+        const tbody = document.getElementById('userTableBody');
+        tbody.innerHTML = '';
+        let idx = 1;
+        for (let user in systemUsers) {
+            const tr = document.createElement('tr');
+            const isMaster = user.toLowerCase() === 'rajan';
+            tr.innerHTML = `
+                <td>${idx++}</td>
+                <td><strong>${user}</strong></td>
+                <td>${isMaster ? '******' : systemUsers[user]}</td>
+                <td><span class="btn btn-primary" style="padding:2px 8px; font-size:11px;">${isMaster ? 'Master Admin' : 'General User'}</span></td>
+                <td>
+                    ${isMaster ? '-' : `<button class="btn btn-danger" style="padding:2px 6px; font-size:11px;" onclick="deleteUser('${user}')">মুছুন</button>`}
+                </td>
+            `;
+            tbody.appendChild(tr);
+        }
+    }
+
+    function deleteUser(username) {
+        if(confirm(`আপনি কি নিশ্চিত যে ইউজার '${username}' কে সিস্টেম থেকে ডিলিট করতে চান?`)) {
+            delete systemUsers[username];
+            localStorage.setItem('omar_system_users', JSON.stringify(systemUsers));
+            renderUserTable();
+        }
+    }
+
     function renderLiveDeliveryTable() {
         const tbody = document.getElementById('liveDeliveryTableBody');
         tbody.innerHTML = '';
@@ -663,18 +735,19 @@
                 <td>${item.destination}</td>
                 <td>${item.km}</td>
                 <td>${item.fuelLitre}</td>
-                <td style="font-weight:bold; color:#2f855a;">${income} ৳</td>
+                <td style="font-weight:bold; color:#2c5e5a;">${income} ৳</td>
                 <td>${item.fuelCost} ৳</td>
                 <td>${serv} ৳</td>
                 <td>${labor} ৳</td>
                 <td>${mobil} ৳</td>
                 <td style="color:#c53030;">${(serv+labor+mobil+other).toFixed(1)} ৳</td>
-                <td style="font-weight:bold; color:${netProfit >= 0 ? '#2f855a' : '#c53030'}">${netProfit.toFixed(1)} ৳</td>
+                <td style="font-weight:bold; color:${netProfit >= 0 ? '#2c5e5a' : '#c53030'}">${netProfit.toFixed(1)} ৳</td>
                 <td>${item.mileage ? item.mileage : '-'}</td>
                 <td>${item.type || 'অফিস ট্রিপ'}</td>
-                <td><span style="background:#ebf8ff; padding:2px 6px; border-radius:3px; font-weight:bold; color:#1a365d;">${item.preparedBy || 'Rajan'}</span></td>
-                <td class="no-print">
+                <td><span style="background:#eef6f5; padding:2px 6px; border-radius:3px; font-weight:bold; color:#1e4d4a;">${item.preparedBy || 'Rajan'}</span></td>
+                <td class="no-print" style="display:flex; gap:4px; justify-content:center;">
                     ${isRajan ? `
+                        <button class="btn btn-warning" onclick="loadDeliveryToForm(${item.id})" style="padding:3px 6px; font-size:11px; width:auto;">সংশোধন</button>
                         <button class="btn btn-danger" onclick="deleteDelivery(${item.id})" style="padding:3px 6px; font-size:11px; width:auto;">মুছুন</button>
                     ` : `<span style="color:#888; font-size:11px;">অনুমতি নেই</span>`}
                 </td>
@@ -682,6 +755,95 @@
             tbody.appendChild(tr);
         });
     }
+
+    function loadDeliveryToForm(id) {
+        const isRajan = (currentUser && currentUser.trim().toLowerCase() === 'rajan');
+        if (!isRajan) {
+            alert('অনুমতি নেই! শুধুমাত্র Rajan এই তথ্য সংশোধন করতে পারবেন।');
+            return;
+        }
+
+        const item = deliveriesData.find(d => d.id === id);
+        if(!item) return;
+
+        switchTab('entry');
+
+        document.getElementById('deliveryEditId').value = item.id;
+        document.getElementById('delDate').value = item.date;
+        document.getElementById('delVehicleNo').value = item.vehicleNo;
+        document.getElementById('delDriverName').value = item.driverName;
+        document.getElementById('delDestination').value = item.destination;
+        document.getElementById('delType').value = item.type || 'অফিস ট্রিপ';
+        document.getElementById('delKm').value = item.km;
+        document.getElementById('delFuelLitre').value = item.fuelLitre;
+        document.getElementById('delFuelCost').value = item.fuelCost;
+        document.getElementById('delIncome').value = item.income;
+        document.getElementById('delServicingCost').value = item.servicingCost;
+        document.getElementById('delLaborCost').value = item.laborCost;
+        document.getElementById('delMobilCost').value = item.mobilCost;
+        document.getElementById('delOtherCost').value = item.otherCost;
+        document.getElementById('delRemarks').value = item.remarks || '';
+        
+        calculateTripMetrics();
+
+        document.getElementById('entryFormTitle').textContent = "⚠️ ট্রিপের তথ্য সংশোধন করা হচ্ছে (Editing Mode)";
+        document.getElementById('entryFormTitle').classList.add('edit-mode-title');
+        document.getElementById('saveDeliveryBtn').textContent = "তথ্য আপডেট করুন (Update Entry)";
+        document.getElementById('saveDeliveryBtn').className = "btn btn-warning";
+        document.getElementById('cancelDeliveryBtn').style.display = "inline-flex";
+    }
+
+    function resetDeliveryForm() {
+        document.getElementById('deliveryEditId').value = "-1";
+        document.getElementById('deliveryForm').reset();
+        document.getElementById('delDate').valueAsDate = new Date();
+        document.getElementById('delPreparedBy').value = currentUser;
+        
+        document.getElementById('entryFormTitle').textContent = "প্রতিদিনের পিকাপ ডেলিভারি, আয় ও খরচের তথ্য";
+        document.getElementById('entryFormTitle').classList.remove('edit-mode-title');
+        document.getElementById('saveDeliveryBtn').textContent = "তথ্য সংরক্ষণ করুন (Save Entry)";
+        document.getElementById('saveDeliveryBtn').className = "btn btn-success";
+        document.getElementById('cancelDeliveryBtn').style.display = "none";
+        renderLiveDeliveryTable();
+    }
+
+    document.getElementById('deliveryForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const editId = parseInt(document.getElementById('deliveryEditId').value);
+
+        const delObj = {
+            id: editId === -1 ? Date.now() : editId,
+            date: document.getElementById('delDate').value,
+            vehicleNo: document.getElementById('delVehicleNo').value,
+            driverName: document.getElementById('delDriverName').value.trim(),
+            destination: document.getElementById('delDestination').value.trim(),
+            type: document.getElementById('delType').value,
+            km: parseFloat(document.getElementById('delKm').value) || 0,
+            fuelLitre: parseFloat(document.getElementById('delFuelLitre').value) || 0,
+            fuelCost: parseFloat(document.getElementById('delFuelCost').value) || 0,
+            income: parseFloat(document.getElementById('delIncome').value) || 0,
+            servicingCost: parseFloat(document.getElementById('delServicingCost').value) || 0,
+            laborCost: parseFloat(document.getElementById('delLaborCost').value) || 0,
+            mobilCost: parseFloat(document.getElementById('delMobilCost').value) || 0,
+            otherCost: parseFloat(document.getElementById('delOtherCost').value) || 0,
+            perKmCost: parseFloat(document.getElementById('delPerKmCost').value) || 0,
+            mileage: parseFloat(document.getElementById('delMileage').value) || 0,
+            preparedBy: editId === -1 ? currentUser : (deliveriesData.find(d => d.id === editId)?.preparedBy || currentUser),
+            remarks: document.getElementById('delRemarks').value.trim()
+        };
+
+        if(editId === -1) {
+            deliveriesData.push(delObj);
+            alert('সফলভাবে সংরক্ষণ করা হয়েছে!');
+        } else {
+            const idx = deliveriesData.findIndex(d => d.id === editId);
+            if(idx !== -1) deliveriesData[idx] = delObj;
+            alert('তথ্য সফলভাবে আপডেট করা হয়েছে!');
+        }
+
+        localStorage.setItem('omar_deliveries', JSON.stringify(deliveriesData));
+        resetDeliveryForm();
+    });
 
     document.getElementById('driverForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -791,45 +953,6 @@
         }
     }
 
-    document.getElementById('deliveryForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const delObj = {
-            id: Date.now(),
-            date: document.getElementById('delDate').value,
-            vehicleNo: document.getElementById('delVehicleNo').value,
-            driverName: document.getElementById('delDriverName').value.trim(),
-            destination: document.getElementById('delDestination').value.trim(),
-            type: document.getElementById('delType').value,
-            km: parseFloat(document.getElementById('delKm').value) || 0,
-            fuelLitre: parseFloat(document.getElementById('delFuelLitre').value) || 0,
-            fuelCost: parseFloat(document.getElementById('delFuelCost').value) || 0,
-            
-            income: parseFloat(document.getElementById('delIncome').value) || 0,
-            servicingCost: parseFloat(document.getElementById('delServicingCost').value) || 0,
-            laborCost: parseFloat(document.getElementById('delLaborCost').value) || 0,
-            mobilCost: parseFloat(document.getElementById('delMobilCost').value) || 0,
-            otherCost: parseFloat(document.getElementById('delOtherCost').value) || 0,
-
-            perKmCost: parseFloat(document.getElementById('delPerKmCost').value) || 0,
-            mileage: parseFloat(document.getElementById('delMileage').value) || 0,
-            preparedBy: currentUser,
-            remarks: document.getElementById('delRemarks').value.trim()
-        };
-
-        deliveriesData.push(delObj);
-        localStorage.setItem('omar_deliveries', JSON.stringify(deliveriesData));
-
-        alert('সফলভাবে সংরক্ষণ করা হয়েছে!');
-        
-        const savedDate = document.getElementById('delDate').value;
-        this.reset();
-        document.getElementById('delDate').value = savedDate;
-        document.getElementById('delPreparedBy').value = currentUser;
-        
-        renderLiveDeliveryTable();
-    });
-
     function generateReport() {
         const vehicleFilter = document.getElementById('filterVehicle').value;
         const destFilter = document.getElementById('filterDestination').value.trim().toLowerCase();
@@ -919,7 +1042,7 @@
                     <td>${item.destination}</td>
                     <td>${item.km}</td>
                     <td>${item.fuelLitre}</td>
-                    <td style="font-weight:bold; background-color:#f0fff4; color:#2f855a;">${income} ৳</td>
+                    <td style="font-weight:bold; background-color:#eef6f5; color:#2c5e5a;">${income} ৳</td>
                     <td>${fuel} ৳</td>
                     <td>${serv} ৳</td>
                     <td>${labor} ৳</td>
@@ -928,9 +1051,10 @@
                     <td style="font-weight:bold; background-color:#fffaf0; color:#b7791f;">${fuel.toFixed(1)} ৳</td>
                     <td style="font-weight:bold; background-color:#fff5f5; color:#c53030;">${itemOtherCost.toFixed(1)} ৳</td>
                     <td>${item.type || 'অফিস ট্রিপ'}</td>
-                    <td style="font-weight:bold; background-color:#ebf8ff; color:${netProfit >= 0 ? '#2f855a' : '#c53030'}">${netProfit.toFixed(1)} ৳</td>
-                    <td class="no-print">
+                    <td style="font-weight:bold; background-color:#eef6f5; color:${netProfit >= 0 ? '#2c5e5a' : '#c53030'}">${netProfit.toFixed(1)} ৳</td>
+                    <td class="no-print" style="display:flex; gap:4px; justify-content:center;">
                         ${isRajan ? `
+                            <button class="btn btn-warning" onclick="loadDeliveryToForm(${item.id})" style="padding:3px 6px; font-size:11px; width:auto;">সংশোধন</button>
                             <button class="btn btn-danger" onclick="deleteDelivery(${item.id})" style="padding:3px 6px; font-size:11px; width:auto;">মুছুন</button>
                         ` : `<span style="color:#888; font-size:11px;">অনুমতি নেই</span>`}
                     </td>
@@ -965,12 +1089,6 @@
         }
         document.getElementById('sumReportPeriod').textContent = datePeriodText;
         document.getElementById('reportDateHeader').textContent = "বিবরণী ও রিপোর্ট (" + datePeriodText + ")";
-
-        if(totNetProfit < 0) {
-            document.getElementById('sumNetProfit').style.color = '#c53030';
-        } else {
-            document.getElementById('sumNetProfit').style.color = '#1a365d';
-        }
     }
 
     function resetReportFilter() {
@@ -981,24 +1099,11 @@
         generateReport();
     }
 
-    function deleteDelivery(id) {
-        const isRajan = (currentUser && currentUser.trim().toLowerCase() === 'rajan');
-        if (!isRajan) {
-            alert('অনুমতি নেই! শুধুমাত্র Rajan এই তথ্য মুছে ফেলতে পারবেন।');
-            return;
-        }
-        if(confirm('আপনি কি নিশ্চিত যে এই এনট্রিটি মুছে ফেলতে চান?')) {
-            deliveriesData = deliveriesData.filter(item => item.id !== id);
-            localStorage.setItem('omar_deliveries', JSON.stringify(deliveriesData));
-            renderLiveDeliveryTable();
-            generateReport();
-        }
-    }
-
     function downloadDataBackup() {
         const backupData = {
             vehicles: vehiclesData,
             deliveries: deliveriesData,
+            systemUsers: systemUsers,
             exportDate: new Date().toISOString()
         };
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData));
@@ -1025,14 +1130,17 @@
                 if (restoredObj.vehicles && restoredObj.deliveries) {
                     vehiclesData = restoredObj.vehicles;
                     deliveriesData = restoredObj.deliveries;
+                    if(restoredObj.systemUsers) systemUsers = restoredObj.systemUsers;
                     
                     localStorage.setItem('omar_vehicles', JSON.stringify(vehiclesData));
                     localStorage.setItem('omar_deliveries', JSON.stringify(deliveriesData));
+                    localStorage.setItem('omar_system_users', JSON.stringify(systemUsers));
 
                     alert('অভিনন্দন! আপনার আগের ডাটা সফলভাবে সফটওয়্যারে লোড হয়েছে।');
                     updateVehicleDropdowns();
                     renderDriverTable();
                     renderLiveDeliveryTable();
+                    renderUserTable();
                     generateReport();
                 } else {
                     alert('ভুল ফাইল সিলেক্ট করেছেন! সঠিক ব্যাকআপ ফাইল বেছে নিন।');
